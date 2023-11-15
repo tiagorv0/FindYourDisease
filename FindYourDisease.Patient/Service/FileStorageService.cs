@@ -73,7 +73,7 @@ public class FileStorageService : IFileStorageService
         {
             content.CopyTo(ms);
             var fileBytes = ms.ToArray();
-            fileName = $"{fileName}.{extension}";
+            fileName = $"{fileName}{extension}";
             var path = Path.Combine(_pathOptions.Path, fileName);
 
             await File.WriteAllBytesAsync(path, fileBytes);

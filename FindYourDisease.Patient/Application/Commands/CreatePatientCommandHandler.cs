@@ -25,7 +25,7 @@ public class CreatePatientCommandHandler : IRequestHandler<CreatePatientCommand,
     {
         var fileName = await _fileStorageService.SaveFileAsync(request.PatientRequest.Photo, Path.GetExtension(request.PatientRequest.Photo.FileName));
 
-        if(_notificationCollector.HasNotifications())
+        if (_notificationCollector.HasNotifications())
             return default;
 
         var patient = PatientRequest.ToPatient(request.PatientRequest);

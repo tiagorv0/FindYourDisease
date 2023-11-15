@@ -38,7 +38,7 @@ public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand,
         if (_notificationCollector.HasNotifications())
             return default;
 
-        if(!string.IsNullOrEmpty(request.PatientRequest.Password))
+        if (!string.IsNullOrEmpty(request.PatientRequest.Password))
             patient.HashedPassword = PasswordHasher.Hash(request.PatientRequest.Password);
 
         patient.Name = request.PatientRequest.Name;

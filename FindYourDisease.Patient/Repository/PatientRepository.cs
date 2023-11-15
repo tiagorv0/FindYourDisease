@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using FindYourDisease.Patient.Model;
 using Npgsql;
 
 namespace FindYourDisease.Patient.Repository;
@@ -19,8 +18,18 @@ public class PatientRepository : IPatientRepository
         using (var db = new NpgsqlConnection(_config.GetConnectionString(NAME_CONNECTION)))
         {
             await db.OpenAsync();
-            var script = "SELECT * FROM Patients WHERE Id = @id";
+            var script = "SELECT * FROM \"Patients\" WHERE Id = @id";
             return await db.QueryFirstOrDefaultAsync<Model.Patient>(new CommandDefinition(script, new { id }, cancellationToken: cancellationToken));
+        }
+    }
+
+    public async Task<Model.Patient> GetAsync(string queryCondition, CancellationToken cancellationToken = default)
+    {
+        using (var db = new NpgsqlConnection(_config.GetConnectionString(NAME_CONNECTION)))
+        {
+            await db.OpenAsync();
+            var script = "SELECT * FROM \"Patients\" @queryCondition";
+            return await db.QueryFirstOrDefaultAsync<Model.Patient>(new CommandDefinition(script, new { queryCondition }, cancellationToken: cancellationToken));
         }
     }
 
@@ -29,17 +38,17 @@ public class PatientRepository : IPatientRepository
         using (var db = new NpgsqlConnection(_config.GetConnectionString(NAME_CONNECTION)))
         {
             await db.OpenAsync();
-            var script = "SELECT * FROM Patients";
+            var script = "SELECT * FROM \"Patients\"";
             return await db.QueryAsync<Model.Patient>(new CommandDefinition(script, cancellationToken: cancellationToken));
         }
     }
 
-    public async Task<bool> ExistEmailAsync(string queryCondition, CancellationToken cancellationToken = default)
+    public async Task<bool> ExistAsync(string queryCondition, CancellationToken cancellationToken = default)
     {
         using (var db = new NpgsqlConnection(_config.GetConnectionString(NAME_CONNECTION)))
         {
             await db.OpenAsync();
-            var script = "SELECT * FROM Patients @queryCondition";
+            var script = "SELECT * FROM \"Patients\" @queryCondition";
             var result = await db.QuerySingleOrDefaultAsync<Model.Patient>(new CommandDefinition(script, new { queryCondition }, cancellationToken: cancellationToken));
             return result != null;
         }
@@ -53,7 +62,7 @@ public class PatientRepository : IPatientRepository
         using (var db = new NpgsqlConnection(_config.GetConnectionString(NAME_CONNECTION)))
         {
             await db.OpenAsync();
-            var script = @"INSERT INTO Patients(CreatedAt, UpdateAt, Name, Description, Email, Phone, HashedPassword, Photo, BirthDate, City, State, Country, Active)
+            var script = @"INSERT INTO \""Patients\"" (CreatedAt, UpdateAt, Name, Description, Email, Phone, HashedPassword, Photo, BirthDate, City, State, Country, Active)
                 VALUES (@CreatedAt, @UpdateAt, @Name, @Description, @Email, @Phone, @HashedPassword, @Photo, @BirthDate, @City, @State, @Country, @Active)
                 WHERE Email = @Email";
             await db.ExecuteAsync(new CommandDefinition(script, patient, cancellationToken: cancellationToken));
@@ -78,10 +87,7 @@ public class PatientRepository : IPatientRepository
         using (var db = new NpgsqlConnection(_config.GetConnectionString(NAME_CONNECTION)))
         {
             await db.OpenAsync();
-            var script = @"Update Patients 
-                SET Active = @active, 
-                UpdateAt = @updateAt 
-                WHERE Id = @id";
+            var script = "Update \"Patients\" SET Active = @active, UpdateAt = @updateAt WHERE Id = @id";
             await db.ExecuteAsync(script, new { updateAt = DateTime.Now, active = false, id });
         }
     }

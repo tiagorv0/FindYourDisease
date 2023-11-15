@@ -7,7 +7,6 @@ public class PatientRequest
     public string Email { get; set; }
     public string Phone { get; set; }
     public string Password { get; set; }
-    public DateTime CreatedAt { get; set; }
     public IFormFile Photo { get; set; }
     public DateTime BirthDate { get; set; }
     public string City { get; set; }
@@ -21,7 +20,6 @@ public class PatientRequest
             Description = patient.Description,
             Email = patient.Email,
             Phone = patient.Phone,
-            CreatedAt = patient.CreatedAt,
             BirthDate = patient.BirthDate,
             City = patient.City,
             State = patient.State,
