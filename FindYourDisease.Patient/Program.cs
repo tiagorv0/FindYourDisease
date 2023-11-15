@@ -1,4 +1,6 @@
 using FindYourDisease.Patient.Application.Commands;
+using FindYourDisease.Patient.Endpoints;
+using FindYourDisease.Patient.Options;
 using FindYourDisease.Patient.Repository;
 using FindYourDisease.Patient.Service;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +14,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
+builder.Services.AddScoped<INotificationCollector, NotificationCollector>();
+
+builder.Services.Configure<PathOptions>(builder.Configuration.GetSection(nameof(PathOptions)));
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CreatePatientCommand>());
 
@@ -31,12 +36,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5);
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+app.MapPostCreatePatient();
 
 app.Run();

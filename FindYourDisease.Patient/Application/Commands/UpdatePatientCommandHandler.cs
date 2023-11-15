@@ -1,30 +1,58 @@
 ﻿using FindYourDisease.Patient.Abstractions;
 using FindYourDisease.Patient.DTO;
 using FindYourDisease.Patient.Repository;
+using FindYourDisease.Patient.Service;
 using MediatR;
+using SecureIdentity.Password;
 
 namespace FindYourDisease.Patient.Application.Commands;
 
-public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand, Result<PatientResponse>>
+public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand, PatientResponse>
 {
     private readonly IPatientRepository _patientRepository;
+    private readonly IFileStorageService _fileStorageService;
+    private readonly INotificationCollector _notificationCollector;
 
-    public UpdatePatientCommandHandler(IPatientRepository patientRepository)
+    public UpdatePatientCommandHandler(IPatientRepository patientRepository,
+        IFileStorageService fileStorageService,
+        INotificationCollector notificationCollector)
     {
         _patientRepository = patientRepository;
+        _fileStorageService = fileStorageService;
+        _notificationCollector = notificationCollector;
     }
 
-    public async Task<Result<PatientResponse>> Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
+    public async Task<PatientResponse> Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
     {
         var patient = await _patientRepository.GetByIdAsync(request.Id, cancellationToken);
 
-        if(patient == null)
-            return Result<PatientResponse>.Failure(Error.Patient_Not_Found);
+        if (patient == null)
+        {
+            _notificationCollector.AddNotification(ErrorMessages.Patient_Not_Found);
+            return default;
+        }
 
-        patient.BirthDate = patient.BirthDate == request.PatientRequest.BirthDate ? patient.BirthDate : request.PatientRequest.BirthDate;
+        var updatedFileName = await _fileStorageService
+            .UpdateFileAsync(patient.Photo, request.PatientRequest.Photo, Path.GetExtension(request.PatientRequest.Photo.FileName));
 
-        var result = await _patientRepository.GetByIdAsync(patient.Id, cancellationToken);
+        if (_notificationCollector.HasNotifications())
+            return default;
 
-        return Result<PatientResponse>.Success(PatientResponse.FromPatient(result));
+        if(!string.IsNullOrEmpty(request.PatientRequest.Password))
+            patient.HashedPassword = PasswordHasher.Hash(request.PatientRequest.Password);
+
+        patient.Name = request.PatientRequest.Name;
+        patient.Description = request.PatientRequest.Description;
+        patient.Email = request.PatientRequest.Email;
+        patient.Phone = request.PatientRequest.Phone;
+        patient.Photo = updatedFileName ?? patient.Photo;
+        patient.BirthDate = request.PatientRequest.BirthDate;
+        patient.City = request.PatientRequest.City;
+        patient.State = request.PatientRequest.State;
+        patient.Country = request.PatientRequest.Country;
+
+        await _patientRepository.UpdateAsync(patient, cancellationToken);
+
+        return PatientResponse.FromPatient(patient);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace FindYourDisease.Patient.Abstractions;
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace FindYourDisease.Patient.Abstractions;
 
 public class Result<T> where T : class
 {
@@ -28,5 +30,6 @@ public class Result<T> where T : class
 
 
     public static Result<T> Success(T data) => new(data, Error.None);
-    public static Result<T> Failure(Error error) => new(error);
+    public static Result<T?> Success() => new(Error.None);
+    public static Result<T?> Failure(Error error) => new(error);
 }
