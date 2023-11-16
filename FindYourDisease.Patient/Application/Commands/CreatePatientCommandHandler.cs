@@ -1,10 +1,8 @@
-﻿using FindYourDisease.Patient.DTO;
-using FindYourDisease.Patient.Repository;
-using FindYourDisease.Patient.Service;
+﻿using FindYourDisease.Patient.Application.Service;
+using FindYourDisease.Patient.Domain.DTO;
+using FindYourDisease.Patient.Infra.Repository;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using SecureIdentity.Password;
-using static Dapper.SqlMapper;
 
 namespace FindYourDisease.Patient.Application.Commands;
 

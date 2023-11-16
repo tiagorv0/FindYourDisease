@@ -1,4 +1,4 @@
-﻿using FindYourDisease.Patient.DTO;
+﻿using FindYourDisease.Patient.Domain.DTO;
 using MediatR;
 
 namespace FindYourDisease.Patient.Application.Commands;

@@ -1,4 +1,4 @@
-﻿namespace FindYourDisease.Patient.DTO;
+﻿namespace FindYourDisease.Patient.Domain.DTO;
 
 public class PatientResponse
 {

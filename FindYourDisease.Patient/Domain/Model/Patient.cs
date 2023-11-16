@@ -1,4 +1,4 @@
-﻿namespace FindYourDisease.Patient.Model;
+﻿namespace FindYourDisease.Patient.Domain.Model;
 
 public class Patient
 {

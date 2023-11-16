@@ -1,4 +1,4 @@
-﻿namespace FindYourDisease.Patient.Service;
+﻿namespace FindYourDisease.Patient.Application.Service;
 
 public class NotificationCollector : INotificationCollector
 {

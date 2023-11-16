@@ -1,4 +1,4 @@
-﻿using FindYourDisease.Patient.DTO;
+﻿using FindYourDisease.Patient.Domain.DTO;
 
 namespace FindYourDisease.Patient.Application.Login;
 

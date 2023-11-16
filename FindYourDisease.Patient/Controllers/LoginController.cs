@@ -1,6 +1,6 @@
 ﻿using FindYourDisease.Patient.Application.Login;
-using FindYourDisease.Patient.DTO;
-using FindYourDisease.Patient.Service;
+using FindYourDisease.Patient.Application.Service;
+using FindYourDisease.Patient.Domain.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FindYourDisease.Patient.Controllers;

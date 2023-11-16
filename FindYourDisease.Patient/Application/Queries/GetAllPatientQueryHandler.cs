@@ -1,5 +1,5 @@
-﻿using FindYourDisease.Patient.DTO;
-using FindYourDisease.Patient.Repository;
+﻿using FindYourDisease.Patient.Domain.DTO;
+using FindYourDisease.Patient.Infra.Repository;
 using MediatR;
 
 namespace FindYourDisease.Patient.Application.Queries;

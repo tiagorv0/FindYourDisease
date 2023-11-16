@@ -1,8 +1,8 @@
 using FindYourDisease.Patient.Application.Commands;
 using FindYourDisease.Patient.Application.Login;
-using FindYourDisease.Patient.Options;
-using FindYourDisease.Patient.Repository;
-using FindYourDisease.Patient.Service;
+using FindYourDisease.Patient.Application.Service;
+using FindYourDisease.Patient.Domain.Options;
+using FindYourDisease.Patient.Infra.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

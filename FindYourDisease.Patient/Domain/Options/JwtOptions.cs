@@ -1,4 +1,4 @@
-﻿namespace FindYourDisease.Patient.Options;
+﻿namespace FindYourDisease.Patient.Domain.Options;
 
 public class JwtOptions
 {

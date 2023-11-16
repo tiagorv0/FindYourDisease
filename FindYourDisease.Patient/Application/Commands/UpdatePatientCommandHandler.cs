@@ -1,7 +1,7 @@
-﻿using FindYourDisease.Patient.Abstractions;
-using FindYourDisease.Patient.DTO;
-using FindYourDisease.Patient.Repository;
-using FindYourDisease.Patient.Service;
+﻿using FindYourDisease.Patient.Application.Service;
+using FindYourDisease.Patient.Domain.Abstractions;
+using FindYourDisease.Patient.Domain.DTO;
+using FindYourDisease.Patient.Infra.Repository;
 using MediatR;
 using SecureIdentity.Password;
 
@@ -32,11 +32,15 @@ public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand,
             return default;
         }
 
-        var updatedFileName = await _fileStorageService
-            .UpdateFileAsync(patient.Photo, request.PatientRequest.Photo, Path.GetExtension(request.PatientRequest.Photo.FileName));
+        string? updatedFileName = null;
+        if(request.PatientRequest.Photo == null)
+        {
+            updatedFileName = await _fileStorageService
+           .UpdateFileAsync(patient.Photo, request.PatientRequest.Photo, Path.GetExtension(request.PatientRequest.Photo.FileName));
 
-        if (_notificationCollector.HasNotifications())
-            return default;
+            if (_notificationCollector.HasNotifications())
+                return default;
+        }
 
         if (!string.IsNullOrEmpty(request.PatientRequest.Password))
             patient.HashedPassword = PasswordHasher.Hash(request.PatientRequest.Password);

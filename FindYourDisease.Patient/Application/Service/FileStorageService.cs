@@ -1,8 +1,8 @@
-﻿using FindYourDisease.Patient.Abstractions;
-using FindYourDisease.Patient.Options;
+﻿using FindYourDisease.Patient.Domain.Abstractions;
+using FindYourDisease.Patient.Domain.Options;
 using Microsoft.Extensions.Options;
 
-namespace FindYourDisease.Patient.Service;
+namespace FindYourDisease.Patient.Application.Service;
 
 public class FileStorageService : IFileStorageService
 {
@@ -50,7 +50,7 @@ public class FileStorageService : IFileStorageService
 
         if (File.Exists(path))
             await Task.Run(() => File.Delete(path));
-        else 
+        else
             _notificationCollector.AddNotification(ErrorMessages.File_Not_Found);
     }
 

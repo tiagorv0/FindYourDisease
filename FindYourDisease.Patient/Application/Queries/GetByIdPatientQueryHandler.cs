@@ -1,7 +1,7 @@
-﻿using FindYourDisease.Patient.Abstractions;
-using FindYourDisease.Patient.DTO;
-using FindYourDisease.Patient.Repository;
-using FindYourDisease.Patient.Service;
+﻿using FindYourDisease.Patient.Application.Service;
+using FindYourDisease.Patient.Domain.Abstractions;
+using FindYourDisease.Patient.Domain.DTO;
+using FindYourDisease.Patient.Infra.Repository;
 using MediatR;
 
 namespace FindYourDisease.Patient.Application.Queries;

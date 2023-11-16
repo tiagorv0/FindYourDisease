@@ -1,4 +1,4 @@
-﻿namespace FindYourDisease.Patient.Abstractions;
+﻿namespace FindYourDisease.Patient.Domain.Abstractions;
 
 public static class ErrorMessages
 {

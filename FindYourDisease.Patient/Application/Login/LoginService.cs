@@ -1,8 +1,8 @@
-﻿using FindYourDisease.Patient.Abstractions;
-using FindYourDisease.Patient.DTO;
-using FindYourDisease.Patient.Options;
-using FindYourDisease.Patient.Repository;
-using FindYourDisease.Patient.Service;
+﻿using FindYourDisease.Patient.Application.Service;
+using FindYourDisease.Patient.Domain.Abstractions;
+using FindYourDisease.Patient.Domain.DTO;
+using FindYourDisease.Patient.Domain.Options;
+using FindYourDisease.Patient.Infra.Repository;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SecureIdentity.Password;
@@ -27,7 +27,7 @@ public class LoginService : ILoginService
 
     public async Task<string> LoginAsync(LoginRequest request)
     {
-        var patient = await _patientRepository.GetAsync($"where Email = {request.Email}");
+        var patient = await _patientRepository.GetAsync($"WHERE \"Email\" = {request.Email}");
 
         if (patient is null || !PasswordHasher.Verify(patient.HashedPassword, request.Password))
         {
@@ -40,7 +40,7 @@ public class LoginService : ILoginService
         return token;
     }
 
-    private string GenerateToken(Model.Patient patient)
+    private string GenerateToken(Domain.Model.Patient patient)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_jwtOptions.Key);

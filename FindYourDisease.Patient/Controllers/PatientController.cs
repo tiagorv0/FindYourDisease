@@ -1,7 +1,7 @@
 ﻿using FindYourDisease.Patient.Application.Commands;
 using FindYourDisease.Patient.Application.Queries;
-using FindYourDisease.Patient.DTO;
-using FindYourDisease.Patient.Service;
+using FindYourDisease.Patient.Application.Service;
+using FindYourDisease.Patient.Domain.DTO;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
