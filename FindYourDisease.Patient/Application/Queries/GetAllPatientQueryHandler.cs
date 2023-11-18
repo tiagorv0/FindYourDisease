@@ -15,7 +15,7 @@ public class GetAllPatientQueryHandler : IRequestHandler<GetAllPatientQuery, IEn
 
     public async Task<IEnumerable<PatientResponse>> Handle(GetAllPatientQuery request, CancellationToken cancellationToken)
     {
-        var patients = await _patientRepository.GetAllAsync(cancellationToken);
+        var patients = await _patientRepository.GetAllAsync(request.Active, cancellationToken);
 
         return PatientResponse.FromPatient(patients);
     }

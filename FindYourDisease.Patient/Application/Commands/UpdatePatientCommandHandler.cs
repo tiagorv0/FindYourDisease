@@ -24,16 +24,13 @@ public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand,
 
     public async Task<PatientResponse> Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
     {
-        var patient = await _patientRepository.GetByIdAsync(request.Id, cancellationToken);
+        var patient = await ValidationAsync(request, cancellationToken);
 
-        if (patient == null)
-        {
-            _notificationCollector.AddNotification(ErrorMessages.Patient_Not_Found);
+        if (_notificationCollector.HasNotifications())
             return default;
-        }
 
         string? updatedFileName = null;
-        if(request.PatientRequest.Photo == null)
+        if(request.PatientRequest.Photo is not null)
         {
             updatedFileName = await _fileStorageService
            .UpdateFileAsync(patient.Photo, request.PatientRequest.Photo, Path.GetExtension(request.PatientRequest.Photo.FileName));
@@ -54,9 +51,25 @@ public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand,
         patient.City = request.PatientRequest.City;
         patient.State = request.PatientRequest.State;
         patient.Country = request.PatientRequest.Country;
+        patient.Active = request.PatientRequest.Active;
 
         await _patientRepository.UpdateAsync(patient, cancellationToken);
 
         return PatientResponse.FromPatient(patient);
+    }
+
+    private async Task<Domain.Model.Patient> ValidationAsync(UpdatePatientCommand request, CancellationToken cancellationToken)
+    {
+        var patient = await _patientRepository.GetByIdAsync(request.Id, null, cancellationToken);
+
+        var patientByEmail = await _patientRepository.GetAsync("Email", request.PatientRequest.Email);
+
+        if (patient is null)
+            _notificationCollector.AddNotification(ErrorMessages.Patient_Not_Found);
+
+        if (patientByEmail is not null && patientByEmail.Id != request.Id)
+            _notificationCollector.AddNotification(ErrorMessages.Email_Already_Exist);
+
+        return patient;
     }
 }

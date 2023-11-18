@@ -2,6 +2,7 @@ using FindYourDisease.Patient.Application.Commands;
 using FindYourDisease.Patient.Application.Login;
 using FindYourDisease.Patient.Application.Service;
 using FindYourDisease.Patient.Domain.Options;
+using FindYourDisease.Patient.Infra.MessageBus;
 using FindYourDisease.Patient.Infra.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +40,7 @@ builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 builder.Services.AddScoped<INotificationCollector, NotificationCollector>();
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IMessageBusService, MessageBusService>();
 
 builder.Services.Configure<PathOptions>(builder.Configuration.GetSection(nameof(PathOptions)));
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));

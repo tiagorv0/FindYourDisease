@@ -19,7 +19,7 @@ public class DeletePatientCommandHandler : IRequestHandler<DeletePatientCommand,
 
     public async Task<PatientResponse> Handle(DeletePatientCommand request, CancellationToken cancellationToken)
     {
-        var patient = await _patientRepository.GetByIdAsync(request.Id, cancellationToken);
+        var patient = await _patientRepository.GetByIdAsync(request.Id, true, cancellationToken);
 
         if (patient == null)
         {

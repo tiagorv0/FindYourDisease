@@ -74,9 +74,12 @@ public class PatientController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetPatients()
+    public async Task<IActionResult> GetPatients([FromQuery] bool active)
     {
-        var command = new GetAllPatientQuery();
+        var command = new GetAllPatientQuery()
+        {
+            Active = active
+        };
 
         var response = await _mediator.Send(command);
 

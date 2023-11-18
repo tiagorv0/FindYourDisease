@@ -27,7 +27,7 @@ public class LoginService : ILoginService
 
     public async Task<string> LoginAsync(LoginRequest request)
     {
-        var patient = await _patientRepository.GetAsync($"WHERE \"Email\" = {request.Email}");
+        var patient = await _patientRepository.GetAsync("Email", request.Email);
 
         if (patient is null || !PasswordHasher.Verify(patient.HashedPassword, request.Password))
         {

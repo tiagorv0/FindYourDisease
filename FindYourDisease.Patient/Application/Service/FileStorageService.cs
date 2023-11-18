@@ -24,12 +24,12 @@ public class FileStorageService : IFileStorageService
             return default;
         }
 
-        var fileName = await SaveFile(content, extension, Guid.NewGuid().ToString());
+        var fileName = await SaveFile(content, extension, HandleFileName(null));
 
         return fileName;
     }
 
-    public async Task<string> UpdateFileAsync(string fileName, IFormFile content, string extension)
+    public async Task<string> UpdateFileAsync(string? fileName, IFormFile content, string extension)
     {
         if (!_allowedExtensions.Contains(extension.ToLower()))
         {
@@ -39,7 +39,7 @@ public class FileStorageService : IFileStorageService
 
         var actualExtensionFile = Path.GetExtension(fileName);
 
-        var updateFileName = await SaveFile(content, extension, fileName.Replace(actualExtensionFile, ""));
+        var updateFileName = await SaveFile(content, extension, HandleFileName(fileName));
 
         return updateFileName;
     }
@@ -80,5 +80,14 @@ public class FileStorageService : IFileStorageService
 
             return fileName;
         }
+    }
+    
+    private string HandleFileName(string? fileName)
+    {
+        if(string.IsNullOrEmpty(fileName))
+            return Guid.NewGuid().ToString();
+
+        var actualExtensionFile = Path.GetExtension(fileName);
+        return fileName.Replace(actualExtensionFile, "");
     }
 }
