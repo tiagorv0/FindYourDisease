@@ -19,16 +19,16 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Abstractions\" />
-    <Folder Include="DTO\" />
-    <Folder Include="Model\" />
-    <Folder Include="Repository\" />
-    <Folder Include="Service\" />
+    <Folder Include="Application\Service\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Domain\Abstractions\" />
+    <Folder Include="Domain\DTO\" />
+    <Folder Include="Domain\Model\" />
+    <Folder Include="Infra\Repository\" />
   </ItemGroup>
 
 </Project>

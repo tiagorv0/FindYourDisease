@@ -9,15 +9,20 @@
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.13" />
+    <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Abstractions\" />
-    <Folder Include="DTO\" />
-    <Folder Include="Model\" />
-    <Folder Include="Repository\" />
-    <Folder Include="Service\" />
+    <Folder Include="Application\" />
+    <Folder Include="Domain\Abstractions\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Domain\" />
+    <Folder Include="Domain\DTO\" />
+    <Folder Include="Infra\" />
+    <Folder Include="Domain\Model\" />
+    <Folder Include="Infra\Repository\" />
+    <Folder Include="Application\Service\" />
   </ItemGroup>
 
 </Project>
