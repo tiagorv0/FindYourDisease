@@ -78,14 +78,14 @@ public class UserRepository : IUserRepository
         return await query.ToListAsync();
     }
 
-    public Task<User> GetAsync(string property, dynamic value, CancellationToken cancellationToken = default)
+    public async Task<User> GetAsync(Expression<Func<User, bool>> filter = null, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return await _context.Users.FirstOrDefaultAsync(filter);
     }
 
     public async Task<User> GetByIdAsync(long id, CancellationToken cancellationToken = default)
     {
-        return await _context.Users.FirstOrDefaultAsync(x => x.Id == id && x.Active);
+        return await _context.Users.SingleOrDefaultAsync(x => x.Id == id && x.Active);
     }
 
     public async Task<User> UpdateAsync(User user, CancellationToken cancellationToken = default)

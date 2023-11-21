@@ -27,7 +27,7 @@ public class LoginService : ILoginService
 
     public async Task<string> LoginAsync(LoginRequest request)
     {
-        var user = await _userRepository.GetAsync("Email", request.Email);
+        var user = await _userRepository.GetAsync(x => x.Email == request.Email);
 
         if (user is null || !PasswordHasher.Verify(user.HashedPassword, request.Password))
         {
@@ -51,7 +51,7 @@ public class LoginService : ILoginService
                 new Claim(ClaimTypes.Sid, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.MobilePhone, user.Phone),
+                new Claim(ClaimTypes.Role, nameof(user)),
                 new Claim(ClaimTypes.Locality, user.Localization())
             }),
             Expires = DateTime.UtcNow.AddMinutes(_jwtOptions.LifeTimeMinutes),

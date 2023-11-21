@@ -52,6 +52,7 @@ public class LoginService : ILoginService
                 new Claim(ClaimTypes.Name, patient.Name),
                 new Claim(ClaimTypes.Email, patient.Email),
                 new Claim(ClaimTypes.MobilePhone, patient.Phone),
+                new Claim(ClaimTypes.Role, nameof(patient)),
                 new Claim(ClaimTypes.Locality, patient.Localization())
             }),
             Expires = DateTime.UtcNow.AddMinutes(_jwtOptions.LifeTimeMinutes),

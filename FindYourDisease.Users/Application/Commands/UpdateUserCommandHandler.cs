@@ -63,7 +63,7 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserR
     {
         var user = await _userRepository.GetByIdAsync(request.Id, cancellationToken);
 
-        var userByEmail = await _userRepository.GetAsync("Email", request.UserRequest.Email);
+        var userByEmail = await _userRepository.GetAsync(x => x.Email == request.UserRequest.Email, cancellationToken);
 
         if (user is null)
             _notificationCollector.AddNotification(ErrorMessages.User_Not_Found);

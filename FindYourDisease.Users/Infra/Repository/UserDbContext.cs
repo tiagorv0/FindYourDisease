@@ -31,13 +31,13 @@ public class UserDbContext : DbContext
 
             if (entry.State == EntityState.Modified)
             {
-                entry.Property("Updated").CurrentValue = DateTime.Now;
+                entry.Property(x => x.UpdateAt).CurrentValue = DateTime.Now;
             }
 
             if (entry.State == EntityState.Deleted)
             {
                 entry.State = EntityState.Modified;
-                entry.Property("Updated").CurrentValue = DateTime.Now;
+                entry.Property(x => x.UpdateAt).CurrentValue = DateTime.Now;
                 entry.Property(x => x.Active).CurrentValue = false;
             }
         }

@@ -33,7 +33,7 @@ public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand,
         if(request.PatientRequest.Photo is not null)
         {
             updatedFileName = await _fileStorageService
-           .UpdateFileAsync(patient.Photo, request.PatientRequest.Photo, Path.GetExtension(request.PatientRequest.Photo.FileName));
+                .UpdateFileAsync(patient.Photo, request.PatientRequest.Photo, Path.GetExtension(request.PatientRequest.Photo.FileName));
 
             if (_notificationCollector.HasNotifications())
                 return default;

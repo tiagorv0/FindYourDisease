@@ -12,7 +12,7 @@ public interface IUserRepository
             string includeProps = null,
             bool asNoTracking = true, 
             CancellationToken cancellationToken = default);
-    Task<User> GetAsync(string property, dynamic value, CancellationToken cancellationToken = default);
+    Task<User> GetAsync(Expression<Func<User, bool>> filter = null, CancellationToken cancellationToken = default);
     Task<User> GetByIdAsync(long id, CancellationToken cancellationToken = default);
     Task<bool> ExistAsync(Expression<Func<User, bool>> filter = null, CancellationToken cancellationToken = default);
     Task<User> CreateAsync(User user, CancellationToken cancellationToken = default);
