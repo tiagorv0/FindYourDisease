@@ -10,6 +10,6 @@ public class CommentRequest
     public long UserId { get; set; }
     public string UserName { get; set; }
 
-    public static Comment ToComment(CommentRequest request)
-        => new(request.ReportId, request.CommentReplyId, request.Text, request.UserId, request.UserName);
+    public Comment ToComment()
+        => new(ReportId, CommentReplyId, Text, UserId, UserName);
 }

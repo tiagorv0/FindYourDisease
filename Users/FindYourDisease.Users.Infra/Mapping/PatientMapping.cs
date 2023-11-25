@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace FindYourDisease.Patient.Infra.Repository.Mapping;
+namespace FindYourDisease.Users.Infra.Mapping;
 
 public class PatientMapping : IEntityTypeConfiguration<Domain.Model.Patient>
 {
@@ -14,7 +14,8 @@ public class PatientMapping : IEntityTypeConfiguration<Domain.Model.Patient>
         builder.Property(p => p.Description).IsRequired(false).HasMaxLength(400);
         builder.Property(p => p.Email).IsRequired().HasMaxLength(100);
         builder.HasIndex(p => p.Email).IsUnique();
-        builder.Property(p => p.Phone).IsRequired(false).HasMaxLength(25);
+        builder.Property(p => p.Phone).HasMaxLength(20);
+        builder.HasIndex(p => p.Phone).IsUnique();
         builder.Property(p => p.HashedPassword).IsRequired().HasMaxLength(255);
         builder.Property(p => p.Photo).IsRequired(false).HasMaxLength(255);
         builder.Property(p => p.BirthDate).IsRequired();

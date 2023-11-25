@@ -19,7 +19,7 @@ public class CreateCommentHandler : IRequestHandler<CreateComment, CommentRespon
 
     public async Task<CommentResponse> Handle(CreateComment request, CancellationToken cancellationToken)
     {
-        var comment = CommentRequest.ToComment(request.CommentRequest);
+        var comment = request.CommentRequest.ToComment();
 
         await _commentRepository.AddAsync(comment, cancellationToken);
 

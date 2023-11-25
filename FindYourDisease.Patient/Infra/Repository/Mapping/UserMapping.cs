@@ -1,13 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FindYourDisease.Users.Domain.Model;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FindYourDisease.Patient.Infra.Repository.Mapping;
 
-public class PatientMapping : IEntityTypeConfiguration<Domain.Model.Patient>
+public class UserMapping : IEntityTypeConfiguration<User>
 {
-    public void Configure(EntityTypeBuilder<Domain.Model.Patient> builder)
+    public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.ToTable("Patient");
+        builder.ToTable("User");
         builder.HasKey(p => p.Id);
         builder.Property(p => p.Id).ValueGeneratedOnAdd();
         builder.Property(p => p.Name).IsRequired().HasMaxLength(100);
@@ -22,6 +23,5 @@ public class PatientMapping : IEntityTypeConfiguration<Domain.Model.Patient>
         builder.Property(p => p.State).IsRequired().HasMaxLength(100);
         builder.Property(p => p.Country).IsRequired().HasMaxLength(100);
         builder.Property(p => p.Active).IsRequired().HasColumnType("int");
-
     }
 }
