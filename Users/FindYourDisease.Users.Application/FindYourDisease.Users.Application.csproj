@@ -12,9 +12,9 @@
 		<PackageReference Include="MediatR" Version="12.1.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.14" />
 	</ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Users\FindYourDisease.Users.Domain\FindYourDisease.Users.Domain.csproj" />
-  </ItemGroup>
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\FindYourDisease.Users.Domain\FindYourDisease.Users.Domain.csproj" />
+	</ItemGroup>
 
 </Project>

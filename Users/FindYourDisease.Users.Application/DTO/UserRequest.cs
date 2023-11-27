@@ -16,7 +16,6 @@ public class UserRequest
     public string City { get; set; }
     public string State { get; set; }
     public string Country { get; set; }
-    public bool Active { get; set; }
 
     public static User ToPatient(UserRequest user)
         => new(user.Name, user.Description, user.Occupation, user.Email, user.Phone, user.BirthDate, user.City, user.State, user.Country);
