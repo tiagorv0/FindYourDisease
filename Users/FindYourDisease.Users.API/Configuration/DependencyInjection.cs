@@ -17,6 +17,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddDatabaseContext(this IServiceCollection services, IConfiguration configuration)
     {
+        Console.WriteLine(configuration.GetConnectionString("UserConnection"));
         services.AddDbContext<UserDbContext>(opt =>
         {
             opt.UseNpgsql(configuration.GetConnectionString("UserConnection"));

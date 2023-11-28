@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\FindYourDisease.Users.Application\FindYourDisease.Users.Application.csproj" />
+    <ProjectReference Include="..\FindYourDisease.Users.Application\FindYourDisease.Users.Application.csproj" />
     <ProjectReference Include="..\FindYourDisease.Users.Infra\FindYourDisease.Users.Infra.csproj" />
   </ItemGroup>
 

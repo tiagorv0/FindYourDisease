@@ -1,0 +1,48 @@
+version: "3.8"
+
+volumes:
+  FindYourDiseaseUserDb:
+
+networks:
+  postgreNET:
+  findyourdiseaseuserNET:
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:14-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=UserDB
+    ports:
+      - 5433:5432
+    networks:
+      - postgreNET
+    volumes:
+      - FindYourDiseaseUserDb:/var/lib/postgresql/data
+    
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - postgreNET
+  
+  findyourdiseaseuser:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: FindYourDiseaseUser
+    environment:
+      - DBHOST=postgres
+    ports:
+      - 5000:80
+    networks:
+      - findyourdiseaseuserNET
+      - postgreNET
+    depends_on:
+      - postgres
+

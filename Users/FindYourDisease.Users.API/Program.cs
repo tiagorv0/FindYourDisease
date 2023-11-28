@@ -1,4 +1,5 @@
 using FindYourDisease.Users.API.Configuration;
+using FindYourDisease.Users.Infra.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,12 +15,15 @@ builder.Services.AddDatabaseContext(builder.Configuration)
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+using (var scope = app.Services.CreateScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var dbContext = scope.ServiceProvider.GetRequiredService<UserDbContext>();
+
+    dbContext.Database.EnsureCreated();
 }
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
