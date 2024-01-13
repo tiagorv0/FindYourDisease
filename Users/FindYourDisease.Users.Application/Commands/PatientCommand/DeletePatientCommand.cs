@@ -1,9 +1,10 @@
-﻿using FindYourDisease.Users.Application.DTO;
+﻿using FindYourDisease.Users.Application.Caching;
+using FindYourDisease.Users.Application.DTO;
 using MediatR;
 
 namespace FindYourDisease.Users.Application.Commands.PatientCommand;
 
-public class DeletePatientCommand : IRequest<PatientResponse>
+public class DeletePatientCommand : CachePatient, IRequest<PatientResponse>
 {
     public long Id { get; set; }
 }

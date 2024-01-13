@@ -12,12 +12,14 @@ public class CreatePatientCommandHandler : IRequestHandler<CreatePatientCommand,
     private readonly IPatientRepository _patientRepository;
     private readonly IFileStorageService _fileStorageService;
     private readonly INotificationCollector _notificationCollector;
+    private readonly ICachingService _cachingService;
 
-    public CreatePatientCommandHandler(IPatientRepository patientRepository, IFileStorageService fileStorageService, INotificationCollector notificationCollector)
+    public CreatePatientCommandHandler(IPatientRepository patientRepository, IFileStorageService fileStorageService, INotificationCollector notificationCollector, ICachingService cachingService)
     {
         _patientRepository = patientRepository;
         _fileStorageService = fileStorageService;
         _notificationCollector = notificationCollector;
+        _cachingService = cachingService;
     }
 
     public async Task<PatientResponse> Handle(CreatePatientCommand request, CancellationToken cancellationToken)
@@ -35,13 +37,17 @@ public class CreatePatientCommandHandler : IRequestHandler<CreatePatientCommand,
         if (request.PatientRequest.Photo is not null)
         {
             var fileName = await _fileStorageService.SaveFileAsync(request.PatientRequest.Photo, Path.GetExtension(request.PatientRequest.Photo.FileName));
+
             patient.SetPhoto(fileName);
+
             if (_notificationCollector.HasNotifications())
                 return default;
         }
 
         var patientId = await _patientRepository.CreateAsync(patient, cancellationToken);
         patient.Id = patientId;
+
+        await _cachingService.SetAsync(request.SetCacheKey(patientId), patient);
 
         return PatientResponse.FromPatient(patient);
     }

@@ -21,7 +21,8 @@ public class AuthService : IAuthService
     {
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Sid, user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.Name),
             new Claim(ClaimTypes.Email, user.Email),
             new Claim(ClaimTypes.Role, RolePolicy.User)
         };
@@ -33,7 +34,8 @@ public class AuthService : IAuthService
     {
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, patient.Id.ToString()),
+            new Claim(ClaimTypes.Sid, patient.Id.ToString()),
+            new Claim(ClaimTypes.Name, patient.Name),
             new Claim(ClaimTypes.Email, patient.Email),
             new Claim(ClaimTypes.MobilePhone, patient.Phone),
             new Claim(ClaimTypes.Role, RolePolicy.Patient)

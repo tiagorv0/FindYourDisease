@@ -10,11 +10,13 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, UserR
 {
     private readonly IUserRepository _userRepository;
     private readonly INotificationCollector _notificationCollector;
+    private readonly ICachingService _cachingService;
 
-    public DeleteUserCommandHandler(IUserRepository userRepository, INotificationCollector notificationCollector)
+    public DeleteUserCommandHandler(IUserRepository userRepository, INotificationCollector notificationCollector, ICachingService cachingService)
     {
         _userRepository = userRepository;
         _notificationCollector = notificationCollector;
+        _cachingService = cachingService;
     }
 
     public async Task<UserResponse> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
@@ -28,6 +30,8 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, UserR
         }
 
         await _userRepository.DeleteAsync(user.Id, cancellationToken);
+
+        await _cachingService.RemoveAsync(request.SetCacheKey(user.Id));
 
         return UserResponse.FromUser(user);
     }

@@ -12,14 +12,17 @@ public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand,
     private readonly IPatientRepository _patientRepository;
     private readonly IFileStorageService _fileStorageService;
     private readonly INotificationCollector _notificationCollector;
+    private readonly ICachingService _cachingService;
 
     public UpdatePatientCommandHandler(IPatientRepository patientRepository,
         IFileStorageService fileStorageService,
-        INotificationCollector notificationCollector)
+        INotificationCollector notificationCollector,
+        ICachingService cachingService)
     {
         _patientRepository = patientRepository;
         _fileStorageService = fileStorageService;
         _notificationCollector = notificationCollector;
+        _cachingService = cachingService;
     }
 
     public async Task<PatientResponse> Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
@@ -47,20 +50,27 @@ public class UpdatePatientCommandHandler : IRequestHandler<UpdatePatientCommand,
 
         await _patientRepository.UpdateAsync(patient, cancellationToken);
 
+        await _cachingService.SetAsync(request.SetCacheKey(patient.Id), patient);
+
         return PatientResponse.FromPatient(patient);
     }
 
-    private async Task<Domain.Model.Patient> ValidationAsync(UpdatePatientCommand request, CancellationToken cancellationToken)
+    private async Task<Domain.Model.Patient?> ValidationAsync(UpdatePatientCommand request, CancellationToken cancellationToken)
     {
         var patient = await _patientRepository.GetByIdAsync(request.Id, null, cancellationToken);
-
-        var patientByEmail = await _patientRepository.GetAsync("Email", request.PatientRequest.Email);
 
         if (patient is null)
             _notificationCollector.AddNotification(ErrorMessages.Patient_Not_Found);
 
+        var patientByEmail = await _patientRepository.GetAsync("Email", request.PatientRequest.Email, cancellationToken);
+
         if (patientByEmail is not null && patientByEmail.Id != request.Id)
             _notificationCollector.AddNotification(ErrorMessages.Email_Already_Exist);
+
+        var patientByPhone = await _patientRepository.GetAsync("Phone", request.PatientRequest.Phone, cancellationToken);
+
+        if (patientByPhone is not null && patientByPhone.Id != request.Id)
+            _notificationCollector.AddNotification(ErrorMessages.Phone_Already_Exist);
 
         return patient;
     }

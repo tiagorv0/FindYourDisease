@@ -10,11 +10,13 @@ public class DeletePatientCommandHandler : IRequestHandler<DeletePatientCommand,
 {
     private readonly IPatientRepository _patientRepository;
     private readonly INotificationCollector _notificationCollector;
+    private readonly ICachingService _cachingService;
 
-    public DeletePatientCommandHandler(IPatientRepository patientRepository, INotificationCollector notificationCollector)
+    public DeletePatientCommandHandler(IPatientRepository patientRepository, INotificationCollector notificationCollector, ICachingService cachingService)
     {
         _patientRepository = patientRepository;
         _notificationCollector = notificationCollector;
+        _cachingService = cachingService;
     }
 
     public async Task<PatientResponse> Handle(DeletePatientCommand request, CancellationToken cancellationToken)
@@ -28,6 +30,8 @@ public class DeletePatientCommandHandler : IRequestHandler<DeletePatientCommand,
         }
 
         await _patientRepository.DeleteAsync(request.Id, cancellationToken);
+
+        await _cachingService.RemoveAsync(request.SetCacheKey(patient.Id));
 
         return PatientResponse.FromPatient(patient);
     }

@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Scrutor;
-using System.Data;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -17,10 +16,15 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddDatabaseContext(this IServiceCollection services, IConfiguration configuration)
     {
-        Console.WriteLine(configuration.GetConnectionString("UserConnection"));
         services.AddDbContext<UserDbContext>(opt =>
         {
             opt.UseNpgsql(configuration.GetConnectionString("UserConnection"));
+        });
+
+        services.AddStackExchangeRedisCache(o =>
+        {
+            o.InstanceName = configuration.GetValue<string>("Redis:InstanceName");
+            o.Configuration = configuration.GetValue<string>("Redis:Configuration");
         });
 
         return services;
@@ -97,11 +101,6 @@ public static class DependencyInjection
                 }
                 });
         });
-
-        //services.AddStackExchangeRedisCache(o => {
-        //    o.InstanceName = "instance";
-        //    o.Configuration = "localhost:6379";
-        //});
 
         return services;
     }

@@ -9,9 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FindYourDisease.Users.API.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
-public class UserController : ControllerBase
+public class UserController : BaseController
 {
     private readonly IMediator _mediator;
     private readonly INotificationCollector _notification;
@@ -35,13 +33,13 @@ public class UserController : ControllerBase
         return !_notification.HasNotifications() ? Ok(response) : BadRequest(_notification.GetNotifications());
     }
 
-    [HttpPut("update/{id}")]
+    [HttpPut("update")]
     [Authorize(RolePolicy.User)]
-    public async Task<IActionResult> UpdateUser([FromRoute] long id, [FromForm] UserRequest patient)
+    public async Task<IActionResult> UpdateUser([FromForm] UserRequest patient)
     {
         var command = new UpdateUserCommand
         {
-            Id = id,
+            Id = UserId,
             UserRequest = patient
         };
 
@@ -50,13 +48,13 @@ public class UserController : ControllerBase
         return !_notification.HasNotifications() ? Ok(response) : BadRequest(_notification.GetNotifications());
     }
 
-    [HttpDelete("delete/{id}")]
+    [HttpDelete("delete")]
     [Authorize(RolePolicy.User)]
-    public async Task<IActionResult> DeleteUser([FromRoute] long id)
+    public async Task<IActionResult> DeleteUser()
     {
         var command = new DeleteUserCommand
         {
-            Id = id
+            Id = UserId
         };
 
         var response = await _mediator.Send(command);

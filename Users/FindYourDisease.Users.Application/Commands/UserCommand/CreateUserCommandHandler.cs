@@ -12,14 +12,17 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserR
     private readonly IUserRepository _userRepository;
     private readonly INotificationCollector _notificationCollector;
     private readonly IFileStorageService _fileStorage;
+    private readonly ICachingService _cachingService;
 
     public CreateUserCommandHandler(IUserRepository userRepository,
         INotificationCollector notificationCollector,
-        IFileStorageService fileStorage)
+        IFileStorageService fileStorage,
+        ICachingService cachingService)
     {
         _userRepository = userRepository;
         _notificationCollector = notificationCollector;
         _fileStorage = fileStorage;
+        _cachingService = cachingService;
     }
 
     public async Task<UserResponse> Handle(CreateUserCommand request, CancellationToken cancellationToken)
@@ -44,6 +47,8 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserR
 
         var id = await _userRepository.CreateAsync(user, cancellationToken);
         user.Id = id;
+
+        await _cachingService.SetAsync(request.SetCacheKey(user.Id), user);
 
         return UserResponse.FromUser(user);
     }

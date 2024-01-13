@@ -13,14 +13,17 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserR
     private readonly IUserRepository _userRepository;
     private readonly INotificationCollector _notificationCollector;
     private readonly IFileStorageService _fileStorage;
+    private readonly ICachingService _cachingService;
 
     public UpdateUserCommandHandler(IUserRepository userRepository,
         IFileStorageService fileStorage,
-        INotificationCollector notificationCollector)
+        INotificationCollector notificationCollector,
+        ICachingService cachingService)
     {
         _userRepository = userRepository;
         _notificationCollector = notificationCollector;
         _fileStorage = fileStorage;
+        _cachingService = cachingService;
     }
 
     public async Task<UserResponse> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
@@ -47,6 +50,8 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserR
             request.UserRequest.BirthDate, request.UserRequest.City, request.UserRequest.State, request.UserRequest.Country);
 
         await _userRepository.UpdateAsync(user, cancellationToken);
+
+        await _cachingService.SetAsync(request.SetCacheKey(user.Id), user);
 
         return UserResponse.FromUser(user);
     }

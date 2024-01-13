@@ -6,9 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FindYourDisease.Users.API.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
-public class LoginController : ControllerBase
+public class LoginController : BaseController
 {
     private readonly IMediator _mediator;
     private readonly INotificationCollector _notification;
